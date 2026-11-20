@@ -1,15 +1,12 @@
 // Sunset Vice Cover Maker — hand-in program for the make.fun bounty
 // gta6-cover-art-01 ("Make GTA 6 Cover Art").
 //
-// Round 2 fixes the grader run: the output directory is now cleared entry
-// by entry and is never removed itself, so the program runs cleanly inside
-// the grader's read-only container.
-//
 // What it does, in order:
 //   1. Works out where this repository sits (the folder holding main.ts) and
 //      where the hand-in goes: $MAKEFUN_OUTPUT_DIR when set, else /output.
-//   2. Creates the output folder if needed and clears whatever a previous
-//      run left inside it, entry by entry.
+//   2. Empties the output folder entry by entry — it never deletes the
+//      output directory itself, because on the grader that directory is a
+//      root-owned mount point and removing it fails with EPERM.
 //   3. Copies the whole app/ tree and the whole screenshots/ tree from the
 //      repository into the output folder, byte for byte.
 //   4. Writes dossier.json into the output folder with buildDossier from the
@@ -20,7 +17,13 @@
 // repository writes the same bytes: the copies are plain file copies and
 // buildDossier is deterministic.
 
-import { cpSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -28,11 +31,10 @@ import { buildDossier } from './vendor/makefun-app.ts';
 const repoDir = dirname(fileURLToPath(import.meta.url));
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-// Create the output folder if it is missing, then clear its contents entry
-// by entry. The output directory itself must never be removed: the grader's
-// /output is a mount point owned by root, and this program runs there as an
-// unprivileged user, so deleting the directory fails with EPERM. Removing
-// each entry inside it works everywhere and leaves no stale file behind.
+// Make sure the output folder exists, then clear its CONTENTS one entry at
+// a time. The folder itself is left in place: it may be a mount point the
+// process has no right to remove, and a stale file from an earlier run must
+// never slip into the hand-in either.
 mkdirSync(outputDir, { recursive: true });
 for (const entry of readdirSync(outputDir)) {
   rmSync(join(outputDir, entry), { recursive: true, force: true });
@@ -40,7 +42,9 @@ for (const entry of readdirSync(outputDir)) {
 
 // The app itself and the screenshots its maker took.
 cpSync(join(repoDir, 'app'), join(outputDir, 'app'), { recursive: true });
-cpSync(join(repoDir, 'screenshots'), join(outputDir, 'screenshots'), { recursive: true });
+cpSync(join(repoDir, 'screenshots'), join(outputDir, 'screenshots'), {
+  recursive: true,
+});
 
 // The dossier the judge reads, built from exactly what was just copied.
 const dossierBytes = buildDossier(outputDir, {
@@ -52,4 +56,6 @@ const dossierBytes = buildDossier(outputDir, {
 });
 writeFileSync(join(outputDir, 'dossier.json'), dossierBytes);
 
-console.log(`handed in app/ and screenshots/ to ${outputDir} with dossier.json (${dossierBytes.length} bytes)`);
+console.log(
+  `handed in app/ and screenshots/ to ${outputDir} with dossier.json (${dossierBytes.length} bytes)`,
+);

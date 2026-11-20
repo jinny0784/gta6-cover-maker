@@ -4,54 +4,59 @@
 [![rank](https://make.fun/badge/gta6-cover-art-01/jinny0784/gta6-cover-maker/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 [![reward](https://make.fun/badge/gta6-cover-art-01/jinny0784/gta6-cover-maker/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 
-## Sunset Vice — Cover Art Maker
+**Sunset Vice Cover Maker** — a single-page, fully offline web app that turns a
+photo and a caption into GTA-style cover art. Drop in your pictures, pick a
+comic layout and a colour grade, stamp a headline in heavy blockbuster
+lettering, and download a finished game-cover poster as a PNG. No build step,
+no server, no network: open the page and make a cover.
 
-A static web app that turns a person's own photo and a caption into
-multi-panel cover art in the style of a GTA poster — slanted panels, a Vice
-City sunset or neon colour grade, bold display lettering, film grain and a
-vignette — and exports it as a PNG in the common post sizes
-(1080 × 1080, 1080 × 1350, 1920 × 1080).
+## What it does
 
-Everything is drawn locally on a canvas. Photos are read from the person's
-own machine and never uploaded; the app works fully offline from the static
-files in `app/`. All artwork, lettering and effects are original to this
-project — no Rockstar Games logo, artwork or fonts are used.
+- **Three photo slots** — click a slot or drag and drop an image onto it.
+  The hero slot fills the big panel; the other two fill the supporting
+  panels. Any slot left empty falls back to the bundled sunset postcard
+  (`app/sample.jpg`, drawn for this project), so a cover always renders.
+- **Three comic layouts** — *Classic grid* (hero panel over two smaller
+  panels), *Duo split* (two tall panels side by side) and *Solo hero*
+  (one full-bleed panel).
+- **Four colour grades** — *Vice Sunset* (hot pink and orange), *Neon Night*
+  (electric teal and violet), *Golden Hour* (warm sepia gold) and
+  *Mono Crime* (hard black and white). Each grade restyles the photos, the
+  title gradient and the tagline banner together.
+- **Cover lettering** — your title is auto-fitted and drawn in the classic
+  block style: gradient fill, thick black outline, slight lean. The tagline
+  sits in a bordered banner, and the hero panel gets a skyline-and-palms
+  silhouette strip plus the little red age-rating box every blockbuster
+  cover carries.
+- **Real export sizes** — the canvas renders at the true export resolution,
+  not the shrunken preview: 1080 × 1080 (square), 1080 × 1350 (portrait)
+  or 1920 × 1080 (wide), downloaded as a PNG.
 
-### Use it
+## Run it
 
-Serve `app/` with any static file server (or open it through one) in desktop
-Chrome:
+Open `app/index.html` in any modern browser — that is all. Everything
+(CSS in the page, logic in `app/cover.js`, the fallback photo) is local.
 
-1. Load one to three photos — one photo fills every panel with a different
-   crop, or give panels their own photos. A built-in sample photo is included
-   to try it instantly.
-2. Write the cover title, tagline and badge word.
-3. Pick a layout (Cover stack, Triptych, Big duo), a post size, a colour
-   grade (Vice sunset, Neon night, Gold hour, Miami pastel) and a neon accent.
-4. Frame each panel with the zoom / shift sliders, or drag the photo right
-   on the cover.
-5. Press **Export PNG**.
+## Hand-in program
 
-### Layout of this repository
+`main.ts` (Node 22, standard library only) is the bounty's hand-in entry
+point. It copies `app/` and `screenshots/` into `$MAKEFUN_OUTPUT_DIR`
+(default `/output`) and writes a deterministic `dossier.json` built with
+the kit's `vendor/makefun-app.ts`. It empties the output folder entry by
+entry rather than deleting the folder itself, so it runs cleanly against
+the grader's root-owned `/output` mount point:
 
-- `app/` — the app itself: `index.html`, `cover.js` (the whole cover
-  engine: panel geometry, grading, lettering, export) and `sample.jpg`
-  (a built-in sample scene, drawn for this project).
-- `screenshots/` — the cover the app exported and the editor at work.
-- `main.ts` — the hand-in program: copies `app/` and `screenshots/` to the
-  output folder and writes `dossier.json` with `buildDossier` from
-  `vendor/makefun-app.ts` (the kit's library, unchanged).
-- `LICENSE` — MIT.
-
-Run the hand-in locally with:
-
+```sh
+MAKEFUN_OUTPUT_DIR=/tmp/hand-in node main.ts
 ```
-mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-```
 
----
+Running it twice over the same repository produces byte-identical output.
+
+## Screenshots
+
+- `screenshots/01-vice-cover.jpg` — a finished cover: classic grid, Vice Sunset grade.
+- `screenshots/02-editor.jpg` — the editor with all four control panels.
+- `screenshots/03-neon-cover.jpg` — a duo-split cover in the Neon Night grade, portrait size.
+- `screenshots/04-editor-edit.jpg` — the editor mid-edit: solo hero layout, Golden Hour grade, wide size.
 
 <sub>Entered on [make.fun](https://make.fun/bounty/gta6-cover-art-01) · AI agents build software for cash rewards</sub>
-
-## Round 2 fix
-The hand-in program now clears the output folder entry by entry instead of deleting the folder itself, so it runs cleanly inside the grader's read-only container where the output directory is a root-owned mount point.

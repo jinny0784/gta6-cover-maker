@@ -3,233 +3,200 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sunset Vice — Cover Art Maker</title>
+<title>Sunset Vice Cover Maker</title>
 <style>
   :root {
-    --ink: #14101d;
-    --panel: #1e1830;
-    --panel-2: #2a2142;
-    --line: #453a6b;
-    --text: #f4eefc;
-    --dim: #b7a8d9;
+    --ink: #14081f;
+    --panel: #1e0f33;
+    --panel-2: #2a1450;
     --pink: #ff2e88;
     --orange: #ff8a3c;
-    --cyan: #29e6ff;
-    --gold: #ffc93c;
+    --gold: #ffd23c;
+    --teal: #2ee6c8;
+    --paper: #fff6ec;
+    --muted: #c9b8e8;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: radial-gradient(1200px 700px at 70% -10%, #3a2364 0%, var(--ink) 55%) fixed, var(--ink);
-    color: var(--text);
     font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--paper);
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(255, 46, 136, .35), transparent 60%),
+      radial-gradient(900px 480px at -10% 110%, rgba(46, 230, 200, .18), transparent 55%),
+      linear-gradient(160deg, #0d0518 0%, var(--ink) 45%, #241040 100%);
     min-height: 100vh;
   }
   header {
-    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-    padding: 16px 22px 10px;
+    padding: 28px 32px 10px;
+    display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 28px;
   }
-  header h1 {
-    margin: 0; font-size: 30px; letter-spacing: 1px; text-transform: uppercase;
-    font-family: "Arial Narrow", "Liberation Sans Narrow", Impact, sans-serif;
-    font-weight: 900; font-stretch: condensed;
-    background: linear-gradient(92deg, var(--gold) 5%, var(--orange) 38%, var(--pink) 72%, var(--cyan) 105%);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  .logo {
+    font-family: "Arial Narrow", Impact, "Franklin Gothic Medium", sans-serif;
+    font-size: 44px; line-height: .95; letter-spacing: 1px; text-transform: uppercase;
   }
-  header p { margin: 0; color: var(--dim); font-size: 13.5px; }
-  header .badge {
-    margin-left: auto; font-size: 11.5px; color: var(--ink); font-weight: 700;
-    background: linear-gradient(90deg, var(--cyan), #7df0ff); padding: 4px 10px; border-radius: 999px;
-    text-transform: uppercase; letter-spacing: .6px;
+  .logo .vice {
+    background: linear-gradient(92deg, var(--gold) 0%, var(--orange) 45%, var(--pink) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: none;
   }
+  .logo .small { display: block; font-size: 15px; letter-spacing: 6px; color: var(--teal); }
+  header p { max-width: 520px; color: var(--muted); margin: 0 0 6px; font-size: 15px; }
   main {
-    display: grid; grid-template-columns: 322px 1fr; gap: 18px;
-    padding: 8px 22px 26px; align-items: start;
+    display: grid; grid-template-columns: 340px 1fr; gap: 22px;
+    padding: 18px 32px 40px; align-items: start;
   }
   @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-  .controls {
+  .panel {
     background: linear-gradient(180deg, var(--panel-2), var(--panel));
-    border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 18px;
-    display: flex; flex-direction: column; gap: 16px;
-    position: sticky; top: 14px;
+    border: 2px solid rgba(255, 210, 60, .35);
+    border-radius: 14px; padding: 18px; margin-bottom: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.45);
   }
-  .controls section { display: flex; flex-direction: column; gap: 8px; }
-  .controls h2 {
-    margin: 0; font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--gold);
-    display: flex; align-items: center; gap: 8px;
+  .panel h2 {
+    font-family: "Arial Narrow", Impact, sans-serif; text-transform: uppercase;
+    letter-spacing: 2px; font-size: 17px; margin: 0 0 12px; color: var(--gold);
   }
-  .controls h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-  label { font-size: 12.5px; color: var(--dim); display: flex; flex-direction: column; gap: 5px; }
-  input[type="text"], select {
-    background: #171228; color: var(--text); border: 1px solid var(--line);
-    border-radius: 8px; padding: 8px 10px; font-size: 14px; width: 100%;
-  }
-  input[type="text"]:focus, select:focus { outline: 2px solid var(--pink); outline-offset: 0; border-color: transparent; }
-  input[type="range"] { width: 100%; accent-color: var(--pink); }
   .slot {
-    display: flex; align-items: center; gap: 9px; background: #171228;
-    border: 1px dashed var(--line); border-radius: 9px; padding: 7px 9px;
+    display: block;
+    border: 2px dashed rgba(255, 246, 236, .35); border-radius: 10px;
+    padding: 12px; margin-bottom: 10px; text-align: center; cursor: pointer;
+    transition: border-color .15s, background .15s; background: rgba(0,0,0,.25);
   }
-  .slot .thumb {
-    width: 38px; height: 38px; border-radius: 6px; object-fit: cover; background: #0d0a18;
-    border: 1px solid var(--line); flex: none;
+  .slot:hover, .slot.drag { border-color: var(--pink); background: rgba(255,46,136,.12); }
+  .slot strong { display: block; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+  .slot span { font-size: 12px; color: var(--muted); }
+  .slot input { display: none; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choices label {
+    flex: 1 1 30%; text-align: center; padding: 9px 6px; border-radius: 9px; cursor: pointer;
+    border: 2px solid rgba(255,246,236,.25); font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px; background: rgba(0,0,0,.25);
   }
-  .slot .slot-name { font-size: 12.5px; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .slot button, .mini {
-    background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
-    border-radius: 7px; padding: 5px 9px; font-size: 12px; cursor: pointer;
+  .choices input { display: none; }
+  .choices label:has(input:checked) {
+    border-color: var(--gold); color: var(--ink);
+    background: linear-gradient(92deg, var(--gold), var(--orange));
   }
-  .slot button:hover, .mini:hover { border-color: var(--pink); }
-  .slot input[type="file"] { display: none; }
-  .row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .row > * { flex: 1; }
-  .seg { display: flex; background: #171228; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
-  .seg button {
-    flex: 1; background: transparent; color: var(--dim); border: 0; padding: 8px 4px;
-    font-size: 12.5px; cursor: pointer;
+  .swatches label { flex: 1 1 45%; }
+  .swatch { display: block; height: 14px; border-radius: 5px; margin-bottom: 5px; }
+  .sw-vice { background: linear-gradient(90deg, #ffd23c, #ff8a3c, #ff2e88); }
+  .sw-neon { background: linear-gradient(90deg, #2ee6c8, #3c8aff, #b44dff); }
+  .sw-golden { background: linear-gradient(90deg, #fff3b0, #ffb703, #bc6c25); }
+  .sw-mono { background: linear-gradient(90deg, #f8f9fa, #868e96, #212529); }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 5px; }
+  .field input[type="text"], .field select {
+    width: 100%; padding: 10px 12px; border-radius: 9px; border: 2px solid rgba(255,246,236,.25);
+    background: rgba(0,0,0,.35); color: var(--paper); font-size: 15px;
   }
-  .seg button.on { background: linear-gradient(90deg, var(--orange), var(--pink)); color: #fff; font-weight: 700; }
-  .swatches { display: flex; gap: 8px; }
-  .swatch {
-    width: 34px; height: 34px; border-radius: 9px; border: 2px solid transparent; cursor: pointer; flex: none;
+  .field input[type="text"]:focus, .field select:focus { outline: none; border-color: var(--teal); }
+  button.download {
+    width: 100%; padding: 14px; border: none; border-radius: 11px; cursor: pointer;
+    font-family: "Arial Narrow", Impact, sans-serif; font-size: 19px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--ink);
+    background: linear-gradient(92deg, var(--gold), var(--orange) 55%, var(--pink));
+    box-shadow: 0 8px 22px rgba(255, 46, 136, .35);
   }
-  .swatch.on { border-color: #fff; }
-  #exportBtn {
-    background: linear-gradient(92deg, var(--orange), var(--pink) 60%, #b832ff);
-    color: #fff; border: 0; border-radius: 11px; padding: 13px 14px;
-    font-size: 16px; font-weight: 800; letter-spacing: .4px; cursor: pointer; text-transform: uppercase;
-  }
-  #exportBtn:hover { filter: brightness(1.1); }
-  .hint { font-size: 11.5px; color: var(--dim); line-height: 1.45; margin: 0; }
+  button.download:hover { filter: brightness(1.08); }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
   .stage {
-    background: #0d0a18; border: 1px solid var(--line); border-radius: 14px;
-    padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-    min-height: 70vh; justify-content: center;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0 14px, transparent 14px 28px),
+      linear-gradient(180deg, #1a0b2e, #12071f);
+    border: 2px solid rgba(46, 230, 200, .3); border-radius: 14px; padding: 22px;
+    text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,.45);
   }
-  #cover {
-    max-width: 100%; max-height: 74vh; width: auto; height: auto;
-    box-shadow: 0 24px 70px rgba(0,0,0,.65), 0 0 0 1px #000;
-    background: #221a3d;
+  .stage h2 {
+    font-family: "Arial Narrow", Impact, sans-serif; text-transform: uppercase;
+    letter-spacing: 2px; font-size: 17px; margin: 0 0 14px; color: var(--teal); text-align: left;
   }
-  .stage .meta { color: var(--dim); font-size: 12.5px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-  .stage .meta b { color: var(--text); }
-  .checkline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); }
-  .checkline input { accent-color: var(--pink); width: 16px; height: 16px; }
+  canvas#cover {
+    max-width: 100%; height: auto; border: 4px solid #0a0512; border-radius: 6px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.6); background: #000;
+  }
+  #status { min-height: 20px; font-size: 13px; color: var(--gold); margin-top: 12px; }
+  footer { padding: 0 32px 28px; color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>Sunset Vice</h1>
-  <p>Turn a photo into multi-panel, neon-sunset cover art — right in your browser. Your photos never leave this machine.</p>
-  <span class="badge">Offline · No upload</span>
+  <div class="logo">Sunset <span class="vice">Vice</span><span class="small">Cover Maker</span></div>
+  <p>Drop in up to three photos, pick a comic layout and a colour grade, stamp your
+     headline in full blockbuster lettering, and export a game-cover poster as a PNG.
+     Everything runs in your browser — no uploads, no network.</p>
 </header>
+
 <main>
-  <aside class="controls">
-    <section>
-      <h2>1 · Photos</h2>
-      <div class="slot">
-        <img class="thumb" id="thumb0" alt="">
-        <span class="slot-name" id="name0">Photo A — empty</span>
-        <button type="button" id="pick0">Choose…</button>
-        <input type="file" id="file0" accept="image/*">
-      </div>
-      <div class="slot">
-        <img class="thumb" id="thumb1" alt="">
-        <span class="slot-name" id="name1">Photo B — empty</span>
-        <button type="button" id="pick1">Choose…</button>
-        <input type="file" id="file1" accept="image/*">
-      </div>
-      <div class="slot">
-        <img class="thumb" id="thumb2" alt="">
-        <span class="slot-name" id="name2">Photo C — empty</span>
-        <button type="button" id="pick2">Choose…</button>
-        <input type="file" id="file2" accept="image/*">
-      </div>
-      <div class="row">
-        <button type="button" class="mini" id="sampleBtn">Try the sample photo</button>
-        <button type="button" class="mini" id="clearBtn">Clear photos</button>
-      </div>
-      <p class="hint">One photo fills every panel with a different crop, or load up to three and each panel takes its own. Drag on the cover to move the selected panel's photo.</p>
+  <div>
+    <section class="panel">
+      <h2>1 · Your photos</h2>
+      <label class="slot" data-slot="0">
+        <strong>Hero photo</strong><span>click or drop an image — the big panel</span>
+        <input type="file" accept="image/*" data-file="0">
+      </label>
+      <label class="slot" data-slot="1">
+        <strong>Second photo</strong><span>click or drop an image</span>
+        <input type="file" accept="image/*" data-file="1">
+      </label>
+      <label class="slot" data-slot="2">
+        <strong>Third photo</strong><span>click or drop an image</span>
+        <input type="file" accept="image/*" data-file="2">
+      </label>
+      <p class="hint">Empty slots use the bundled sunset postcard, so a cover always renders.</p>
     </section>
 
-    <section>
-      <h2>2 · Caption</h2>
-      <label>Cover title
-        <input type="text" id="titleInput" value="VICE HEAT" maxlength="26">
-      </label>
-      <label>Tagline
-        <input type="text" id="taglineInput" value="One city. No rules." maxlength="48">
-      </label>
-      <label>Badge word
-        <input type="text" id="badgeInput" value="EST. 2026" maxlength="14">
-      </label>
+    <section class="panel">
+      <h2>2 · Panel layout</h2>
+      <div class="choices" id="layouts">
+        <label><input type="radio" name="layout" value="grid" checked>Classic grid</label>
+        <label><input type="radio" name="layout" value="duo">Duo split</label>
+        <label><input type="radio" name="layout" value="solo">Solo hero</label>
+      </div>
     </section>
 
-    <section>
-      <h2>3 · Layout &amp; size</h2>
-      <div class="seg" id="layoutSeg">
-        <button type="button" data-layout="stack" class="on">Cover stack</button>
-        <button type="button" data-layout="triptych">Triptych</button>
-        <button type="button" data-layout="duo">Big duo</button>
+    <section class="panel">
+      <h2>3 · Colour grade</h2>
+      <div class="choices swatches" id="grades">
+        <label><input type="radio" name="grade" value="vice" checked><span class="swatch sw-vice"></span>Vice Sunset</label>
+        <label><input type="radio" name="grade" value="neon"><span class="swatch sw-neon"></span>Neon Night</label>
+        <label><input type="radio" name="grade" value="golden"><span class="swatch sw-golden"></span>Golden Hour</label>
+        <label><input type="radio" name="grade" value="mono"><span class="swatch sw-mono"></span>Mono Crime</label>
       </div>
-      <div class="seg" id="sizeSeg">
-        <button type="button" data-size="1080x1080">Square 1:1</button>
-        <button type="button" data-size="1080x1350" class="on">Portrait 4:5</button>
-        <button type="button" data-size="1920x1080">Wide 16:9</button>
+    </section>
+
+    <section class="panel">
+      <h2>4 · Headline &amp; export</h2>
+      <div class="field">
+        <label for="title">Cover title</label>
+        <input type="text" id="title" value="SUNSET VICE" maxlength="24">
       </div>
-      <label>Colour grade
-        <select id="gradeSelect">
-          <option value="sunset" selected>Vice sunset</option>
-          <option value="neon">Neon night</option>
-          <option value="gold">Gold hour</option>
-          <option value="miami">Miami pastel</option>
+      <div class="field">
+        <label for="tagline">Tagline</label>
+        <input type="text" id="tagline" value="One city. Zero mercy." maxlength="48">
+      </div>
+      <div class="field">
+        <label for="size">Export size</label>
+        <select id="size">
+          <option value="1080x1080" selected>Square — 1080 × 1080</option>
+          <option value="1080x1350">Portrait — 1080 × 1350</option>
+          <option value="1920x1080">Wide — 1920 × 1080</option>
         </select>
-      </label>
-      <label>Neon accent
-        <span class="swatches" id="accentRow">
-          <span class="swatch on" data-accent="#ff2e88" style="background:#ff2e88" title="Hot pink"></span>
-          <span class="swatch" data-accent="#29e6ff" style="background:#29e6ff" title="Cyan"></span>
-          <span class="swatch" data-accent="#ffc93c" style="background:#ffc93c" title="Gold"></span>
-          <span class="swatch" data-accent="#7C4DFF" style="background:#7C4DFF" title="Violet"></span>
-          <span class="swatch" data-accent="#3dff7a" style="background:#3dff7a" title="Acid green"></span>
-        </span>
-      </label>
-    </section>
-
-    <section>
-      <h2>4 · Frame the panel</h2>
-      <div class="seg" id="panelSeg">
-        <button type="button" data-panel="0" class="on">Panel 1</button>
-        <button type="button" data-panel="1">Panel 2</button>
-        <button type="button" data-panel="2">Panel 3</button>
-        <button type="button" data-panel="3">Panel 4</button>
       </div>
-      <label>Zoom <span id="zoomVal"></span>
-        <input type="range" id="zoomRange" min="100" max="320" value="100">
-      </label>
-      <label>Shift left / right <span id="xVal"></span>
-        <input type="range" id="xRange" min="-100" max="100" value="0">
-      </label>
-      <label>Shift up / down <span id="yVal"></span>
-        <input type="range" id="yRange" min="-100" max="100" value="0">
-      </label>
-      <label class="checkline"><input type="checkbox" id="grainCheck" checked> Film grain &amp; vignette</label>
+      <button class="download" id="download">Download PNG</button>
+      <p class="hint">The preview redraws as you type. The download renders at the full
+         export size you picked, not the shrunken preview size.</p>
     </section>
-
-    <button type="button" id="exportBtn">Export PNG</button>
-    <p class="hint">Exports at the full size you picked — ready to post. Everything is drawn locally on a canvas; nothing is uploaded, ever.</p>
-  </aside>
+  </div>
 
   <section class="stage">
-    <canvas id="cover" width="1080" height="1350"></canvas>
-    <div class="meta">
-      <span>Size <b id="metaSize">1080 × 1350</b></span>
-      <span>Layout <b id="metaLayout">Cover stack</b></span>
-      <span>Grade <b id="metaGrade">Vice sunset</b></span>
-    </div>
+    <h2>Live cover preview</h2>
+    <canvas id="cover" width="1080" height="1080"></canvas>
+    <div id="status">Loading the bundled postcard…</div>
   </section>
 </main>
+
+<footer>Sunset Vice Cover Maker — a fan-made cover toy. Posters you export are yours to keep and share.</footer>
 <script src="cover.js"></script>
 </body>
 </html>
-<!-- Round 2: hand-in program fixed for the grader's read-only run (see main.ts). -->
